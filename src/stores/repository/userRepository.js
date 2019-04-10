@@ -8,12 +8,12 @@ class userRepository {
         } catch{
             e => {
                 console.log(e);
+                return false;
             }
         }
     }
 
     async signUser(email, password) {
-        const data = {}
         try {
             return await axios.get('/user/sign', {
                 params: { email, password }
@@ -21,12 +21,21 @@ class userRepository {
         } catch{
             e => {
                 console.log(e);
-                data = true;
             }
         }
-        return data;
     }
 
+    async userFollow(userId){
+        try {
+            return await axios.get('/user/follow', {
+                params : { userId } 
+            }); 
+        } catch (e) {
+            e =>{
+                console.log(e);
+            }
+        }
+    }
 }
 
 export default new userRepository();

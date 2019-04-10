@@ -8,37 +8,49 @@ class userStore {
 
     @observable userList = [];
     @observable user;
+    @observable isLogger;
 
     constructor(store) {
         this.store = store;
     }
 
-    addUser = (userData) => {
+    addUser = async (userData) => {
         const { email, name, password } = userData;
-        userRepository.addUser(email, name, password).then(res => {
-            console.log(res);
-            alert("가입 완료!");
-        }).catch(e=>{
-            console.log(e);
-            alert("가입 실패!");
-        })
+        await userRepository.addUser(email, name, password)
     }
 
     @action
     signUser = async (userData) => {
         const { email, password } = userData;
-        await userRepository.signUser(email, password).then((res) => {
-            const { data } = res
-
-            this.user = {
-                id : data[0].member_id,
-                name : data[0].name
-            }
-        }).catch((e) => {
+        try {
+            await userRepository.signUser(email, password).then(res => {
+                const { data } = res
+                this.user = {
+                    id : data[0].member_id,
+                    name : data[0].name
+                }
+                this.isLogger =true;
+            })
+        } catch (e) {
             console.log(e);
-        });
+            this.isLogger =false;
+        }
+    }
+
+    @action
+    userFollow = async (userId) => {
+        try {
+            await userRepository.userFollow(userId).then(res =>{
+                const { data } = res
+                this.user.following = data[0].following;
+                this.user.follower = data[0].follower;
+            });
+        } catch (e) {
+            console.log(e)
+        }
     }
     
+
 }
 
 export default new userStore();
