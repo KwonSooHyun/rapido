@@ -49,8 +49,6 @@ class userStore {
             console.log(e)
         }
     }
-    
-
 }
 
 export default new userStore();
