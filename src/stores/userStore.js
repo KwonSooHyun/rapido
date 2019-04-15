@@ -3,11 +3,13 @@ import Autobind from 'autobind-decorator'
 import userModel from './model/userModel'
 import userRepository from './repository/userRepository'
 
+
 @Autobind
 class userStore {
 
     @observable userList = [];
     @observable user;
+    @observable isJoin;
     @observable isLogger;
 
     constructor(store) {
@@ -15,15 +17,22 @@ class userStore {
     }
 
     addUser = async (userData) => {
-        const { email, name, password } = userData;
-        await userRepository.addUser(email, name, password)
+        const { joinEmail, name, joinPassword } = userData;
+        try {
+            await userRepository.addUser(joinEmail, name, joinPassword).then(res => {
+                this.isJoin = true;
+            })
+        } catch (e) {
+            console.log(e);
+            this.isJoin = false;
+        }
     }
 
     @action
     signUser = async (userData) => {
-        const { email, password } = userData;
+        const { signEmail, signPassword } = userData;
         try {
-            await userRepository.signUser(email, password).then(res => {
+            await userRepository.signUser(signEmail, signPassword).then(res => {
                 const { data } = res
                 this.user = {
                     id : data[0].member_id,

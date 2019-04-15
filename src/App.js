@@ -18,7 +18,6 @@ export default class App extends React.Component {
                     <Layout>
                         <Header />
                         <div id="body">
-                            <h3>in body</h3>
                             <Route exact path='/' component={Join}/>
                             <Route path='/main' component={Main}/>
                             
