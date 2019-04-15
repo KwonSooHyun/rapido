@@ -7,16 +7,16 @@ import { withRouter, Redirect } from 'react-router-dom'
 @observer
 class Header extends React.Component {
 
-    @observable email;
-    @observable password;
+    @observable signEmail;
+    @observable signPassword;
 
     render() {
         const { user } = this.props.userStore;
         if (user === undefined) {
             return (
-                <div>
-                    이메일 : <input type='email' name='email' onChange={this.handleChange} value={this.email} />
-                    비밀번호 : <input type='password' name='password' onChange={this.handleChange} value={this.password} />
+                <div id='signForm'>
+                    이메일 : <input type='email' name='signEmail' onChange={this.handleChange} value={this.signEmail} />
+                    비밀번호 : <input type='password' name='signPassword' onChange={this.handleChange} value={this.signPassword} />
                     <button onClick={this.handleSubmit}>로그인</button>
                 </div>
             );
@@ -37,16 +37,20 @@ class Header extends React.Component {
 
     @action
     handleSubmit = () => {
-        const { signUser  } = this.props.userStore;
+        const { signUser } = this.props.userStore;
         signUser(this).then(res => {
             setTimeout(() => {
                 const { isLogger, userFollow, user} = this.props.userStore;
                 if (!isLogger) alert('로그인 실패')
-                else this.props.history.push('/main');
+                else {this.props.history.push('/main')};
                 userFollow(user.id);
+
             }, 0);
         });
-
+        document.getElementsByName('signEmail').value = '';
+        document.getElementsByName('signPassword').value = '';
+        this.signEmail = '';
+        this.signPassword = '';
     }
 }
 

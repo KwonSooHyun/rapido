@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import { observable, action} from 'mobx';
+import { observable, action } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
 @inject('userStore')
 @observer   
 export default class Join extends React.Component {
 
-    @observable email;
-    @observable name;
-    @observable password;
+    @observable joinEmail='';
+    @observable name='';
+    @observable joinPassword='';
 
     render() {
         return (
@@ -17,9 +17,9 @@ export default class Join extends React.Component {
                 <h3>회원 가입</h3>
                 <h4>다양한 사람들을 만나보세요!</h4>
 
-                <input type='email' name='email' placeholder='이메일' onChange={this.handleChange} value={this.email} />
+                <input type='email' name='joinEmail' placeholder='이메일' onChange={this.handleChange} value={this.joinEmail} />
                 <input type='text' name='name' placeholder='이름' onChange={this.handleChange} value={this.name} />
-                <input type='password' name='password' placeholder='비밀번호' onChange={this.handleChange} value={this.password} />
+                <input type='password' name='joinPassword' placeholder='비밀번호' onChange={this.handleChange} value={this.joinPassword} />
                 <button onClick={this.handleSubmit}>회원가입</button>
             </Wraper>
         );
@@ -34,7 +34,20 @@ export default class Join extends React.Component {
     @action
     handleSubmit = () => {
         const {addUser} = this.props.userStore;
-        addUser(this);
+        addUser(this).then(res=>{
+            setTimeout(() => {
+                const {isJoin} = this.props.userStore;
+                if(!isJoin) alert('가입 실패');
+                else alert('가입을 축하드립니다!');
+                
+            }, 0);
+        });
+        document.getElementsByName('joinEmail').value = '';
+        document.getElementsByName('name').value = '';
+        document.getElementsByName('joinPassword').value = '';
+        this.joinEmail = '';
+        this.name = '';
+        this.joinPassword = '';
     }
 
 }
