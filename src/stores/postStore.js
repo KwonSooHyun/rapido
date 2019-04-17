@@ -7,6 +7,7 @@ import postModel from './model/postModel'
 class postStore{
 
     @observable postList = [];
+    @observable userPostList = [];
     @observable isPosting;
 
     constructor(store) {
@@ -33,6 +34,17 @@ class postStore{
             });
         } catch (e) {
             console.log(e);
+        }
+    }
+
+    getUserPostList = async (userId) => {
+        try {
+            await postRepository.getUserPostList(userId).then(res=> {
+                const { data } = res;
+                this.userPostList = data.map(post => new postModel(post));
+            })
+        } catch (e) {
+            console.log(e)
         }
     }
 }

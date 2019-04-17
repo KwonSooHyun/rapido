@@ -1,7 +1,8 @@
 import React from 'react';
+import styled from 'styled-components'
 import { observable, action } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { withRouter, Redirect } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 @inject('userStore')
 @observer
@@ -9,25 +10,40 @@ class Header extends React.Component {
 
     @observable signEmail;
     @observable signPassword;
+    @observable signView;
 
     render() {
+
         const { nowUser } = this.props.userStore;
+
         if (nowUser === undefined) {
             return (
-                <div id='signForm'>
-                    이메일 : <input type='email' name='signEmail' onChange={this.handleChange} value={this.signEmail} />
-                    비밀번호 : <input type='password' name='signPassword' onChange={this.handleChange} value={this.signPassword} />
-                    <button onClick={this.handleSubmit}>로그인</button>
-                </div>
+
+                <LogOut>
+                    <Logo>RAPIDO</Logo>
+                    <div id='sign'>
+                        <div id='text'><label>이메일</label><label>비밀번호</label></div>
+                        <div id='input'>
+                            <label><input type='email' name='signEmail' onChange={this.handleChange} value={this.signEmail} /></label>
+                            <label><input type='password' name='signPassword' onChange={this.handleChange} value={this.signPassword} /></label>
+                        </div>
+                        <label><button onClick={this.handleSubmit}>로그인</button></label>
+                    </div>
+                </LogOut>
             );
         } else {
             return (
-                <div>
-                    {nowUser.name} 님 환영합니다! <br/>
-                    팔로잉 : {nowUser.following} 팔로워 : {nowUser.follower}
-                </div>
+                <LogIn>
+                    <Logo>RAPIDO</Logo>
+                    <div id='signIn'>
+                        <div id='name'>{nowUser.name} 님 환영합니다! </div>
+                        <div id='text'><label>팔로잉</label><label>팔로워</label></div>
+                        <div id='follow'><label>{nowUser.following}</label><label>{nowUser.follower}</label></div>
+                    </div>
+                </LogIn>
             );
         }
+
     }
 
     @action
@@ -39,10 +55,10 @@ class Header extends React.Component {
     handleSubmit = () => {
         const { signUser } = this.props.userStore;
         signUser(this).then(res => {
-                const { isLogger, userFollow, nowUser} = this.props.userStore;
-                if (!isLogger) alert('로그인 실패')
-                else {this.props.history.push('/main')};
-                userFollow(nowUser.id);
+            const { isLogger, userFollow, nowUser } = this.props.userStore;
+            if (!isLogger) alert('로그인 실패')
+            else { this.props.history.push('/main') };
+            userFollow(nowUser.id);
         });
         document.getElementsByName('signEmail').value = '';
         document.getElementsByName('signPassword').value = '';
@@ -52,3 +68,64 @@ class Header extends React.Component {
 }
 
 export default withRouter(Header);
+
+const LogOut = styled.div`
+margin: 0 auto;
+padding-top: 13px;
+width: 100%;
+height: 80px;
+background: #b1ffe5;
+#sign{
+    float: right;
+    #text{
+        label{
+            padding-right: 120px;
+        }
+    
+    }
+    #input{
+        label{
+            padding-right: 8px;
+        }
+    }
+    bottun{
+        label{
+
+        }
+    }
+}
+`
+
+const LogIn = styled.div`
+margin: 0 auto;
+padding-top: 13px;
+width: 100%;
+height: 80px;
+background: #b1ffe5;
+#signIn{
+    float: right;
+    #name{
+    
+    }
+    #text{
+        label{
+            padding-right: 90px;
+        }
+    
+    }
+    #follow{
+        label{
+            padding-right: 117px;
+            padding-left: 17px;
+        }
+    }
+}
+`
+
+const Logo = styled.div`
+display: inline-block;
+font-size: 34px;
+color: #b57fff;
+padding-left: 30px;
+padding-top: 12px;
+`

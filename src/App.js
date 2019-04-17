@@ -8,7 +8,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Join from './components/routers/Join'
 import Main from './components/routers/Main'
-import UserPage from './components/routers/UserPage'
+import User from './components/routers/User'
 
 export default class App extends React.Component {
 
@@ -21,7 +21,7 @@ export default class App extends React.Component {
                         <div id="body">
                             <Route exact path='/' component={Join}/>
                             <Route path='/main' component={Main}/>
-                            <Route path='/UserPage' component={UserPage}/>
+                            <Route path='/user' component={User}/>
                         </div>
                         <Footer />
                     </Layout>
@@ -32,5 +32,5 @@ export default class App extends React.Component {
 }
 
 const Layout = styled.div`
-
+background : linear-gradient(white, #e0e7ff)
 `

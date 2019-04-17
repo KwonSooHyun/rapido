@@ -52,7 +52,7 @@ router.post('/posting', upload.single('photo') ,(req,res)=>{
     }
 })
 
-router.get('/postView', (req, res) => {
+router.get('/postList', (req, res) => {
     const {userId} = req.query;
     try {
         pool.getConnection((err, connection) => {
@@ -60,6 +60,28 @@ router.get('/postView', (req, res) => {
                 throw err
             } else {
                 connection.query(`SELECT post_id, member_id, name, text, photo, createDateTime From post WHERE member_id = '${userId}' OR member_id IN (SELECT following_id FROM follow WHERE follower_id = '${userId}' ORDER BY createDateTime DESC)`, (err, results) => {
+                    if (err)
+                        throw err;
+                    else {
+                        res.send(results);
+                    }
+                });
+                connection.release();
+            }   
+        });
+    } catch (e) {
+        console.log(e);
+    }
+})
+
+router.get('/userPostList', (req, res) => {
+    const {userId} = req.query;
+    try {
+        pool.getConnection((err, connection) => {
+            if (err) { 
+                throw err
+            } else {
+                connection.query(`SELECT post_id, member_id, name, text, photo, createDateTime From post WHERE member_id = '${userId}'`, (err, results) => {
                     if (err)
                         throw err;
                     else {

@@ -17,8 +17,8 @@ export default class Join extends React.Component {
                 <h3>회원 가입</h3>
                 <h4>다양한 사람들을 만나보세요!</h4>
 
-                <input type='email' name='joinEmail' placeholder='이메일' onChange={this.handleChange} value={this.joinEmail} />
-                <input type='text' name='name' placeholder='이름' onChange={this.handleChange} value={this.name} />
+                <input name='joinEmail' placeholder='이메일' onChange={this.handleChange} value={this.joinEmail} />
+                <input name='name' placeholder='이름' onChange={this.handleChange} value={this.name} />
                 <input type='password' name='joinPassword' placeholder='비밀번호' onChange={this.handleChange} value={this.joinPassword} />
                 <button onClick={this.handleSubmit}>회원가입</button>
             </Wraper>
@@ -52,7 +52,5 @@ export default class Join extends React.Component {
 
 
 const Wraper = styled.div`
-h3{
-    color : red;
-}
+
 `
