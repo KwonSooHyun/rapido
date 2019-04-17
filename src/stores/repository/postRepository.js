@@ -19,9 +19,19 @@ class postRepository{
 
     async getPostList(userId){
         try {
-            return await axios.get('/post/postView',{
+            return await axios.get('/post/postList',{
                 params : {userId}
             });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    
+    async getUserPostList(userId){
+        try {
+            return await axios.get('/post/userPostList',{
+                params : {userId}
+            })
         } catch (e) {
             console.log(e);
         }

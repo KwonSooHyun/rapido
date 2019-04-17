@@ -1,4 +1,4 @@
-import { observable, action, computed, extendObservable } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import Autobind from 'autobind-decorator'
 import userModel from './model/userModel'
 import userRepository from './repository/userRepository'
@@ -63,11 +63,11 @@ class userStore {
     }
 
     @action
-    setUser = async (userId) => {
+    getUser = async (userId) => {
         try {
-            await userRepository.setUser(userId).then(res => {
+            await userRepository.getUser(userId).then(res => {
                 const { data } = res;
-                this.userList.push(data[0]);
+                this.user = data[0];
             });
         } catch (e) {
             console.log(e)
@@ -82,9 +82,10 @@ class userStore {
                 this.searchList = data.map(search => new userModel(search));
             })
         } catch (e) {
-            
+            console.log(e)
         }
     }
+
 }
 
 export default new userStore();

@@ -1,11 +1,16 @@
 import React from 'react';
+import styled from 'styled-components'
 
 export default class Footer extends React.Component {
     render(){
         return(
-            <div>
+            <Foot>
                 footer
-            </div>
+            </Foot>
         );
     }
 }
+
+const Foot = styled.div`
+background : white;
+`

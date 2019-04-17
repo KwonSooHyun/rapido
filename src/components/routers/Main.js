@@ -1,6 +1,7 @@
 import React from 'react'
 import { observable, action } from 'mobx';
 import { observer, inject } from 'mobx-react';
+import { Link } from 'react-router-dom';
 
 @inject('userStore', 'postStore')
 @observer
@@ -10,10 +11,8 @@ export default class Main extends React.Component {
     @observable searchText = '';
     @observable photo;
     @observable photoView;
-    @observable list = [];
+    @observable postList = [];
     @observable searchList = [];
-    @observable postUser;
-    @observable name;
 
     componentDidMount() {
         const { getPostList } = this.props.postStore;
@@ -21,9 +20,9 @@ export default class Main extends React.Component {
 
         getPostList(nowUser.id).then(res => {
             const { postList } = this.props.postStore;
-            this.list = postList.map(
-                post => {
-                    return (<div><li>{post.name}</li><li>{post.text}</li><li><img src={'/upload/' + post.photo} /></li><li>{post.createDateTime}</li></div>);
+            this.postList = postList.map(
+                (post) => {
+                    return (<li key={post.post_id}><div>{post.name}</div><div>{post.text}</div><div><img src={'/upload/' + post.photo} /></div><div>{post.createDateTime}</div></li>);
                 }
             )
         });
@@ -46,7 +45,7 @@ export default class Main extends React.Component {
                     {this.searchList}
                 </div>
                 <div>
-                    {this.list}
+                    {this.postList}
                 </div>
             </div>
         )
@@ -89,7 +88,7 @@ export default class Main extends React.Component {
         const { getSearchList } = this.props.userStore;
         getSearchList(this.searchText).then(res=>{
             const { searchList } = this.props.userStore;
-            this.searchList = searchList.map(search => <div><li>{search.name}</li><li>{search.detail}</li></div>)
+            this.searchList = searchList.map(search => <Link to={{pathname : 'user', id : search.member_id}}><div>{search.name}</div><div>{search.detail}</div></Link>)
         });
     }
 }

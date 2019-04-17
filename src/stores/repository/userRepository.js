@@ -33,7 +33,7 @@ class userRepository {
         }
     }
     
-    async setUser(userId){
+    async getUser(userId){
         try {
             return await axios.get('/user/getUser', {
                 params : { userId } 
