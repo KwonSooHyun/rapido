@@ -53,6 +53,28 @@ router.get('/sign', (req, res)=>{
     }
 })
 
+router.get('/getUser', (req, res) => {
+    const {userId} = req.query;
+    try {
+        pool.getConnection((err, connection) => {
+            if (err) { 
+                throw err
+            } else {
+                connection.query(`SELECT member_id, email, name From member WHERE member_id = '${userId}'`, (err, results) => {
+                    if (err)
+                        throw err;
+                    else {
+                        res.send(results);
+                    }
+                });
+                connection.release();
+            }   
+        });
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 router.get('/follow',(req,res)=>{
     const {userId} = req.query
     try {
@@ -70,6 +92,28 @@ router.get('/follow',(req,res)=>{
                 });
                 connection.release();
             }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+})
+
+router.get('/search', (req, res) => {
+    const {searchText} = req.query;
+    try {
+        pool.getConnection((err, connection) => {
+            if (err) { 
+                throw err
+            } else {
+                connection.query(`SELECT member_id, name, detail From member WHERE name LIKE '%${searchText}%'`, (err, results) => {
+                    if (err)
+                        throw err;
+                    else {
+                        res.send(results);
+                    }
+                });
+                connection.release();
+            }   
         });
     } catch (e) {
         console.log(e);

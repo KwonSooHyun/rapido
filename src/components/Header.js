@@ -11,8 +11,8 @@ class Header extends React.Component {
     @observable signPassword;
 
     render() {
-        const { user } = this.props.userStore;
-        if (user === undefined) {
+        const { nowUser } = this.props.userStore;
+        if (nowUser === undefined) {
             return (
                 <div id='signForm'>
                     이메일 : <input type='email' name='signEmail' onChange={this.handleChange} value={this.signEmail} />
@@ -23,8 +23,8 @@ class Header extends React.Component {
         } else {
             return (
                 <div>
-                    {user.name} 님 환영합니다! <br />
-                    팔로잉 : {user.following} 팔로워 : {user.follower}
+                    {nowUser.name} 님 환영합니다! <br/>
+                    팔로잉 : {nowUser.following} 팔로워 : {nowUser.follower}
                 </div>
             );
         }
@@ -39,13 +39,10 @@ class Header extends React.Component {
     handleSubmit = () => {
         const { signUser } = this.props.userStore;
         signUser(this).then(res => {
-            setTimeout(() => {
-                const { isLogger, userFollow, user} = this.props.userStore;
+                const { isLogger, userFollow, nowUser} = this.props.userStore;
                 if (!isLogger) alert('로그인 실패')
                 else {this.props.history.push('/main')};
-                userFollow(user.id);
-
-            }, 0);
+                userFollow(nowUser.id);
         });
         document.getElementsByName('signEmail').value = '';
         document.getElementsByName('signPassword').value = '';

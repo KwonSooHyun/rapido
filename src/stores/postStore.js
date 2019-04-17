@@ -14,9 +14,9 @@ class postStore{
     }
 
     @action
-    addPost = async (id, text, photo) => {
+    addPost = async (id, name, text, photo) => {
         try {
-            await postRepository.addPost(id, text, photo).then(res=>{
+            await postRepository.addPost(id, name, text, photo).then(res=>{
                 this.isPosting = true;
             });
         } catch (e) {

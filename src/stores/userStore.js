@@ -8,6 +8,9 @@ import userRepository from './repository/userRepository'
 class userStore {
 
     @observable userList = [];
+    @observable searchList = [];
+    @observable nowUser;
+    @observable follow;
     @observable user;
     @observable isJoin;
     @observable isLogger;
@@ -33,29 +36,53 @@ class userStore {
         const { signEmail, signPassword } = userData;
         try {
             await userRepository.signUser(signEmail, signPassword).then(res => {
-                const { data } = res
-                this.user = {
-                    id : data[0].member_id,
-                    name : data[0].name
+                const { data } = res;
+                this.nowUser = {
+                    id: data[0].member_id,
+                    name: data[0].name
                 }
-                this.isLogger =true;
+                this.isLogger = true;
             })
         } catch (e) {
             console.log(e);
-            this.isLogger =false;
+            this.isLogger = false;
         }
     }
 
     @action
     userFollow = async (userId) => {
         try {
-            await userRepository.userFollow(userId).then(res =>{
+            await userRepository.userFollow(userId).then(res => {
                 const { data } = res
-                this.user.following = data[0].following;
-                this.user.follower = data[0].follower;
+                this.nowUser.following = data[0].following;
+                this.nowUser.follower = data[0].follower;
             });
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    @action
+    setUser = async (userId) => {
+        try {
+            await userRepository.setUser(userId).then(res => {
+                const { data } = res;
+                this.userList.push(data[0]);
+            });
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    
+    @action
+    getSearchList = async (searchText) => {
+        try {
+            await userRepository.getSearchList(searchText).then(res => {
+                const { data } = res;
+                this.searchList = data.map(search => new userModel(search));
+            })
+        } catch (e) {
+            
         }
     }
 }

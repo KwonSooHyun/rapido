@@ -32,6 +32,26 @@ class userRepository {
                 console.log(e);
         }
     }
+    
+    async setUser(userId){
+        try {
+            return await axios.get('/user/getUser', {
+                params : { userId } 
+            }); 
+        } catch(e){
+            console.log(e);
+        }
+    }
+
+    async getSearchList(searchText){
+        try {
+            return await axios.get('/user/search', {
+                params : { searchText } 
+            }); 
+        } catch (e) {
+            console.log(e);
+        }
+    }
 }
 
 export default new userRepository();
