@@ -35,12 +35,9 @@ export default class Join extends React.Component {
     handleSubmit = () => {
         const {addUser} = this.props.userStore;
         addUser(this).then(res=>{
-            setTimeout(() => {
                 const {isJoin} = this.props.userStore;
                 if(!isJoin) alert('가입 실패');
                 else alert('가입을 축하드립니다!');
-                
-            }, 0);
         });
         document.getElementsByName('joinEmail').value = '';
         document.getElementsByName('name').value = '';

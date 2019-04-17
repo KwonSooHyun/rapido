@@ -30,18 +30,18 @@ const upload = multer({storage});
 router.post('/posting', upload.single('photo') ,(req,res)=>{
     try {
     
-        const {id, text} = req.body
+        const {id, name, text} = req.body;
         
         pool.getConnection((err, connection) => {
             if(err)
                 throw err
             else{
-                connection.query(`INSERT INTO post(member_id, text, photo, createDateTime) VALUE ('${id}','${text}','${req.file.path.split('\\')[1]}', NOW())`,(err, results) => {
+                connection.query(`INSERT INTO post(member_id, name, text, photo, createDateTime) VALUE ('${id}', '${name}', '${text}', '${req.file.path.split('\\')[1]}', NOW())`,(err, results) => {
                     if(err)
                         throw err
                     else{
                         console.log(results);
-                        res.send()
+                        res.send();
                     }
                     connection.release();
                 })
@@ -59,7 +59,7 @@ router.get('/postView', (req, res) => {
             if (err) { 
                 throw err
             } else {
-                connection.query(`SELECT post_id, member_id, text, photo, createDateTime From post WHERE member_id = '${userId}' OR member_id IN (SELECT following_id FROM follow WHERE follower_id = '${userId}' ORDER BY createDateTime DESC)`, (err, results) => {
+                connection.query(`SELECT post_id, member_id, name, text, photo, createDateTime From post WHERE member_id = '${userId}' OR member_id IN (SELECT following_id FROM follow WHERE follower_id = '${userId}' ORDER BY createDateTime DESC)`, (err, results) => {
                     if (err)
                         throw err;
                     else {
