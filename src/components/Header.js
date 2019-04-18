@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 import { observable, action } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom';
 
 @inject('userStore')
 @observer
@@ -12,8 +12,12 @@ class Header extends React.Component {
     @observable signPassword;
     @observable signView;
 
-    render() {
+    componentDidMount(){
+        
+    }
 
+    render() {
+        
         const { nowUser } = this.props.userStore;
 
         if (nowUser === undefined) {
@@ -39,6 +43,10 @@ class Header extends React.Component {
                         <div id='name'>{nowUser.name} 님 환영합니다! </div>
                         <div id='text'><label>팔로잉</label><label>팔로워</label></div>
                         <div id='follow'><label>{nowUser.following}</label><label>{nowUser.follower}</label></div>
+                    </div>
+                    <div id='category'>
+                        <Link to='/main'><div>팔로우 페이지</div></Link>
+                        <Link to='/user'><div>마이 페이지</div></Link>
                     </div>
                 </LogIn>
             );
@@ -74,7 +82,7 @@ margin: 0 auto;
 padding-top: 13px;
 width: 100%;
 height: 80px;
-background: #b1ffe5;
+background: #ffb1b1;
 #sign{
     float: right;
     #text{
@@ -101,7 +109,7 @@ margin: 0 auto;
 padding-top: 13px;
 width: 100%;
 height: 80px;
-background: #b1ffe5;
+background: #ffb1b1;;
 #signIn{
     float: right;
     #name{
@@ -120,6 +128,13 @@ background: #b1ffe5;
         }
     }
 }
+#category{
+    div{
+        width: 49.8%;
+        float: left;
+        border: solid 1px black;
+    }
+}
 `
 
 const Logo = styled.div`
@@ -128,4 +143,5 @@ font-size: 34px;
 color: #b57fff;
 padding-left: 30px;
 padding-top: 12px;
+padding-bottom: 23px;
 `
