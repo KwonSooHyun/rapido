@@ -88,7 +88,6 @@ export default class Main extends React.Component {
         const { getSearchList } = this.props.userStore;
         getSearchList(this.searchText).then(res=>{
             const { searchList } = this.props.userStore;
-            const { nowUser } = this.props.userStore;
             this.searchList = searchList.map(search => <Link to={{pathname : 'user', id : search.member_id}}><div>{search.name}</div><div>{search.detail}</div></Link>)
         });
     }
