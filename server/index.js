@@ -20,11 +20,6 @@ app.use('/user', userRouter);
 app.use('/post', postRouter);
 app.use('/upload', express.static('uploads'));
 
-// app.get('/upload',(req, res) => {
-//     const {img} = req.query;
-//     return express.static('uploads')+img
-// })
-
 app.listen(app.get('port'), () => {
     console.log(app.get('port'), '번 포트에서 대기 중');
 });

@@ -1,18 +1,16 @@
-import React from 'react'
+import React from 'react';
+import styled from 'styled-components';
 import { observable, action } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Link } from 'react-router-dom';
 
 @inject('userStore', 'postStore')
 @observer
 export default class Main extends React.Component {
 
     @observable postText = '';
-    @observable searchText = '';
     @observable photo;
     @observable photoView;
     @observable postList = [];
-    @observable searchList = [];
 
     componentDidMount() {
         const { getPostList } = this.props.postStore;
@@ -22,7 +20,7 @@ export default class Main extends React.Component {
             const { postList } = this.props.postStore;
             this.postList = postList.map(
                 (post) => {
-                    return (<li key={post.post_id}><div>{post.name}</div><div>{post.text}</div><div><img src={'/upload/' + post.photo} /></div><div>{post.createDateTime}</div></li>);
+                    return (<li key={post.post_id} className = 'postList'><div>{post.name}</div><div>{post.text}</div><div><img src={'/upload/'+ post.photo} /></div><div>{post.createDateTime}</div></li>);
                 }
             )
         });
@@ -30,10 +28,10 @@ export default class Main extends React.Component {
 
     render() {
         return (
-            <div>
+            <MainDiv>
                 <div>
-                    <input placeholder='문구 입력' name='postText' onChange={this.handleChange} />
-                    <label htmlFor='photo' >사진 올리기</label>
+                    <input placeholder='게시 글' name='postText' onChange={this.handleChange} />
+                    <label htmlFor='photo' id='photoLabel'>사진 선택</label>
                     <input type='file' id='photo' name='photo' onChange={this.handlePhoto} />
                     <button onClick={this.handleSubmit}>게시</button>
                 </div>
@@ -41,13 +39,9 @@ export default class Main extends React.Component {
                     {this.photoView}
                 </div>
                 <div>
-                    <input placeholder='검색' name='searchText' onChange={this.handleChange}/><button onClick={this.handleSearch}>검색</button>
-                    {this.searchList}
-                </div>
-                <div>
                     {this.postList}
                 </div>
-            </div>
+            </MainDiv>
         )
     }
 
@@ -83,12 +77,32 @@ export default class Main extends React.Component {
         this.photoView = '';
 
     }
+}
 
-    handleSearch = () => {
-        const { getSearchList } = this.props.userStore;
-        getSearchList(this.searchText).then(res=>{
-            const { searchList } = this.props.userStore;
-            this.searchList = searchList.map(search => <Link to={{pathname : 'user', id : search.member_id}}><div>{search.name}</div><div>{search.detail}</div></Link>)
-        });
+
+const MainDiv = styled.div`
+.postList{
+    list-style: none;
+    border: 1px solid #dcdcdc;
+    width: 700px;
+    text-align: center;
+    img{
+        width: 700px;
     }
 }
+#photo{
+    display: none;
+}
+#photoLabel{
+    text-align: center;
+    cursor: default;
+    background-color: #b6b6b6;
+    box-sizing: border-box;
+    padding: 1px 6px;
+    border-width: 2px;
+    border-style: outset;
+    color: #f6f6f6;
+    margin-right: 3px;
+    margin-left: 3px;
+}
+`
