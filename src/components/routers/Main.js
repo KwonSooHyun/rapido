@@ -75,7 +75,6 @@ export default class Main extends React.Component {
         this.text = '';
         this.photo = '';
         this.photoView = '';
-
     }
 }
 

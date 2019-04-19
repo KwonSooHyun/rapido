@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
+const session = require('express-session');
 
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
@@ -15,6 +16,16 @@ app.use(morgan('combined'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
+
+app.use(session({
+    secret: '@#@$MYSIGN#@$#$',
+    resave: false,
+    saveUninitialized: true,
+    cookie : {
+        httpOnly : true,
+        secure : false
+    }
+}));
 
 app.use('/user', userRouter);
 app.use('/post', postRouter);

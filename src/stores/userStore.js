@@ -10,13 +10,44 @@ class userStore {
     @observable userList = [];
     @observable searchList = [];
     @observable nowUser;
-    @observable follow;
     @observable user;
     @observable isJoin;
-    @observable isLogger;
+    @observable isLog;
+    @observable followIndex;
 
     constructor(store) {
         this.store = store;
+    }
+
+    getSession = async () =>{
+        try {
+            await userRepository.getSession().then(res=>{
+                const { data } = res;
+                if(data.member_id){
+                    this.nowUser = {
+                        id: data.member_id,
+                        name: data.name
+                    }
+                    this.isLog = true;
+                }else{
+                    this.nowUser =undefined;
+                    this.isLog = false;
+                }
+            })
+        } catch (e) {
+            console.log(e)
+            this.isLog = false;
+        }
+    }
+
+    logOut = async () => {
+        await userRepository.logOut().then(res=>{
+            const { data } = res;
+            console.log(data)
+        })
+    }
+    restNowUser=()=>{
+        this.nowUser = undefined
     }
 
     addUser = async (userData) => {
@@ -41,11 +72,11 @@ class userStore {
                     id: data[0].member_id,
                     name: data[0].name
                 }
-                this.isLogger = true;
+                this.isLog = true;
             })
         } catch (e) {
             console.log(e);
-            this.isLogger = false;
+            this.isLog = false;
         }
     }
 
@@ -54,6 +85,7 @@ class userStore {
         try {
             await userRepository.userFollow(userId).then(res => {
                 const { data } = res
+                console.log(data[0])
                 this.nowUser.following = data[0].following;
                 this.nowUser.follower = data[0].follower;
             });
@@ -73,7 +105,7 @@ class userStore {
             console.log(e)
         }
     }
-    
+
     @action
     getSearchList = async (searchText) => {
         try {
@@ -84,6 +116,31 @@ class userStore {
         } catch (e) {
             console.log(e)
         }
+    }
+
+    @action
+    isFollow = async (ownerId,id) => {
+        try {
+            await userRepository.isFollow(ownerId,id).then(res => {
+                const { data } = res;
+                console.log(data[0]);
+                this.followNum = data[0].follow_num;
+            })
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    unFollow = async (ownerId, id) => {
+        await userRepository.unFollow(ownerId, id).then(res => {
+            alert('팔로우 취소')
+        })
+    }
+
+    follow = async (ownerId, id) => {
+        await userRepository.follow(ownerId, id).then(res => {
+            alert('팔로우')
+        })
     }
 
 }
