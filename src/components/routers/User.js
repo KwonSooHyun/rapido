@@ -2,25 +2,31 @@ import React from 'react'
 import styled from 'styled-components';
 import { observable, action } from 'mobx';
 import { observer, inject } from 'mobx-react';
+import { withRouter } from 'react-router-dom'
 
 @inject('userStore', 'postStore')
 @observer
-export default class User extends React.Component {
+class User extends React.Component {
 
     @observable userPostList = [];
     @observable user;
     @observable id;
+    @observable ownerId;
     @observable followButton;
 
     componentDidMount(){
-        this.userPageRender()
+        this.userPageRender();
     }
     componentDidUpdate(){
-        if(this.id !== this.props.location.id)
-            this.userPageRender()
+        if(this.id !== this.props.location.id){
+            this.userPageRender();
+        }
     }
 
     render(){
+        if(this.id !== this.props.location.id){
+            this.isFollow(this.props.location.id);
+        }
         return(
             <UserDiv>
                 <Profile>
@@ -50,8 +56,44 @@ export default class User extends React.Component {
             </div>)
         })
     }
-    
+
+    isFollow = (id) => {
+        const {nowUser, isFollow} = this.props.userStore; 
+        isFollow(nowUser.id,id).then(res=>{
+            const {followNum} = this.props.userStore; 
+            if(followNum===1){
+                this.followButton = (<button id='click' onClick={this.handleUnFollow}>팔로우 취소</button>) 
+            }else if(nowUser.id !== id){
+                this.followButton = (<button id='click' onClick={this.handleFollow}>팔로우</button>) 
+            }else{
+                this.followButton = ''
+            }
+        });
+    }
+
+    handleUnFollow = (e) => {
+        const {nowUser, unFollow} = this.props.userStore; 
+        e.preventDefault();
+        unFollow(nowUser.id, this.id).then(res => {
+            const {userFollow} = this.props.userStore;
+            userFollow(nowUser.id);
+        })
+        this.props.history.push('/main')
+    }
+
+    handleFollow = (e) => {
+        const {nowUser, follow} = this.props.userStore; 
+        e.preventDefault();
+        follow(nowUser.id, this.id).then(res => {
+            const {userFollow} = this.props.userStore;
+            userFollow(nowUser.id);
+        })
+        this.props.history.push('/main')
+    }
+
 }
+
+export default withRouter(User);
 
 const Profile = styled.div`
 

@@ -14,13 +14,22 @@ class Header extends React.Component {
     @observable searchText;
     @observable searchList = [];
 
+    componentDidMount(){
+        const { getSession } = this.props.userStore;
+        getSession().then(res=>{
+            const { isLog, userFollow, nowUser } = this.props.userStore;
+            if(isLog) { 
+                this.props.history.push('/main');
+                userFollow(nowUser.id);
+            };
+        });
+    }
+
     render() {
 
         const { nowUser } = this.props.userStore;
-
         if (nowUser === undefined) {
             return (
-
                 <LogOut>
                     <TopDiv>
                         <Logo>RAPIDO</Logo>
@@ -41,9 +50,10 @@ class Header extends React.Component {
                     <TopDiv>
                         <Logo>RAPIDO</Logo>
                         <div id='signIn'>
-                            <div id='name'>{nowUser.name} 님 환영합니다! </div>
+                            <div id='name'>{nowUser.name} 님 환영합니다! </div><button onClick={this.logOut}>로그아웃</button>
                             <div id='text'><label>팔로잉</label><label>팔로워</label></div>
                             <div id='follow'><label>{nowUser.following}</label><label>{nowUser.follower}</label></div>
+                            
                         </div>
                     </TopDiv>
                     <div id='menu'>
@@ -66,12 +76,21 @@ class Header extends React.Component {
         this[e.target.name] = e.target.value;
     }
 
+    logOut = () => {
+        const { logOut } = this.props.userStore;
+        logOut().then(res=>{
+            const { restNowUser } = this.props.userStore;
+            restNowUser()
+            this.props.history.push('/');
+        })
+    }
+
     @action
     handleSubmit = () => {
         const { signUser } = this.props.userStore;
         signUser(this).then(res => {
-            const { isLogger, userFollow, nowUser } = this.props.userStore;
-            if (!isLogger) alert('로그인 실패')
+            const { isLog, userFollow, nowUser } = this.props.userStore;
+            if (!isLog) alert('로그인 실패')
             else { this.props.history.push('/main') };
             userFollow(nowUser.id);
         });
@@ -125,7 +144,7 @@ width: 100%;
 #signIn{
     float: right;
     #name{
-    
+        display: inline-block;
     }
     #text{
         label{
