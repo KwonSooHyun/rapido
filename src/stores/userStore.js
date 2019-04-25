@@ -42,8 +42,7 @@ class userStore {
 
     logOut = async () => {
         await userRepository.logOut().then(res=>{
-            const { data } = res;
-            console.log(data)
+            alert('로그아웃 되었습니다.')
         })
     }
     restNowUser=()=>{
@@ -85,7 +84,6 @@ class userStore {
         try {
             await userRepository.userFollow(userId).then(res => {
                 const { data } = res
-                console.log(data[0])
                 this.nowUser.following = data[0].following;
                 this.nowUser.follower = data[0].follower;
             });
@@ -123,7 +121,6 @@ class userStore {
         try {
             await userRepository.isFollow(ownerId,id).then(res => {
                 const { data } = res;
-                console.log(data[0]);
                 this.followNum = data[0].follow_num;
             })
         } catch (e) {
