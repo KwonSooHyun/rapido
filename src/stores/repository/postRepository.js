@@ -10,7 +10,7 @@ class postRepository{
             data.append('name', name);
             data.append('text', text);
             data.append('photo', photo);
-            return await axios.post('/post/posting',data).then(res => {console.log(res)});
+            return await axios.post('/post/posting',data).then(res => {console.log('포스팅 완료')});
         } catch (e) {
             console.log(e);
             throw new Error('');
