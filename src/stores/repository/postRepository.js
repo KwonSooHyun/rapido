@@ -36,6 +36,14 @@ class postRepository{
             console.log(e);
         }
     }
+    
+    async postDelete(postId){
+        try {
+            return await axios.post('/post/delete',{postId});
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
 }
 

@@ -14,13 +14,17 @@ export default class Join extends React.Component {
     render() {
         return (
             <Wraper>
-                <h3>회원 가입</h3>
-                <h4>다양한 사람들을 만나보세요!</h4>
-
-                <input name='joinEmail' placeholder='이메일' onChange={this.handleChange} value={this.joinEmail} />
-                <input name='name' placeholder='이름' onChange={this.handleChange} value={this.name} />
-                <input type='password' name='joinPassword' placeholder='비밀번호' onChange={this.handleChange} value={this.joinPassword} />
-                <button onClick={this.handleSubmit}>회원가입</button>
+                <div id='left'>
+                    <img src='/upload/network.png'/>
+                </div>
+                <div id='right'>
+                    <h3>회원 가입</h3>
+                    <h4>다양한 사람들을 만나보세요!</h4>
+                    <input name='joinEmail' placeholder='이메일' onChange={this.handleChange} value={this.joinEmail} /><br/>
+                    <input name='name' placeholder='이름' onChange={this.handleChange} value={this.name} /><br/>
+                    <input type='password' name='joinPassword' placeholder='비밀번호' onChange={this.handleChange} value={this.joinPassword} /><br/>
+                    <button onClick={this.handleSubmit}>회원가입</button>
+                </div>
             </Wraper>
         );
     }
@@ -52,5 +56,21 @@ export default class Join extends React.Component {
 
 
 const Wraper = styled.div`
-
+height: 550px;
+#left{
+    float: left;
+    width: 50%;
+    height: 100%;
+    text-align: center;
+    img{
+        width: 50%;
+        padding-top: 10%;
+    }
+}
+#right{
+    float: right;
+    width: 50%;
+    height: 100%;
+    padding-top: 10%;
+}
 `

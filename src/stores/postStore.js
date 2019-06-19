@@ -47,6 +47,17 @@ class postStore{
             console.log(e)
         }
     }
+    
+    postDelete = async (postId) => {
+        try {
+            await postRepository.postDelete(postId).then(res => {
+                alert('삭제됐습니다')
+            })
+        } catch (e) {
+            console.log(e)
+            alert('삭제 실패')
+        }
+    }
 }
 
 export default new postStore();

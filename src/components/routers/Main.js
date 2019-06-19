@@ -29,16 +29,16 @@ export default class Main extends React.Component {
     render() {
         return (
             <MainDiv>
-                <div>
+                <div id='postingDiv'>
                     <input placeholder='게시 글' name='postText' onChange={this.handleChange} />
                     <label htmlFor='photo' id='photoLabel'>사진 선택</label>
                     <input type='file' id='photo' name='photo' onChange={this.handlePhoto} />
                     <button onClick={this.handleSubmit}>게시</button>
                 </div>
-                <div>
+                <div id='photoView'>
                     {this.photoView}
                 </div>
-                <div>
+                <div id='postDiv'>
                     {this.postList}
                 </div>
             </MainDiv>
@@ -103,5 +103,21 @@ const MainDiv = styled.div`
     color: #f6f6f6;
     margin-right: 3px;
     margin-left: 3px;
+}
+#photoView{
+    text-align: center;
+    img{
+        width: 50%;
+        border: 1px #4f21d5 solid;
+    }
+}
+#postingDiv{
+    text-align: center;
+}
+#postDiv{
+    text-align: center;
+    li{
+        margin: 0 auto;
+    }
 }
 `

@@ -96,4 +96,47 @@ router.get('/userPostList', (req, res) => {
     }
 })
 
+router.post('/delete',(req,res)=>{
+    try {
+        const {postId} = req.body;
+        
+        pool.getConnection((err, connection) => {
+            if(err)
+                throw err
+            else{
+                connection.query(`SELECT photo FROM post WHERE post_id = ${postId}`,(err, results) => {
+                    if(err)
+                        throw err
+                    else{
+                        fs.unlink(__dirname+'/../../uploads/'+results[0].photo, (e) => {
+                            if(e) console.log(e)
+                            else console.log('삭제 성공')
+                        })
+                    }
+                    connection.release();
+                })
+            }
+        })
+
+        pool.getConnection((err, connection) => {
+            if(err)
+                throw err
+            else{
+                connection.query(`DELETE FROM post WHERE post_id = ${postId}`,(err, results) => {
+                    if(err)
+                        throw err
+                    else{
+                        console.log(results);
+                        res.send();
+                    }
+                    connection.release();
+                })
+            }
+        })
+
+    } catch (e) {
+        console.log(e)
+    }
+})
+
 module.exports = router;

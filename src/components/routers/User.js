@@ -32,7 +32,7 @@ class User extends React.Component {
                 <Profile>
                     {this.user}
                 </Profile>
-                <div>
+                <div id='postDiv'>
                     {this.userPostList}
                 </div>
             </UserDiv>
@@ -45,8 +45,9 @@ class User extends React.Component {
         const { getUserPostList } = this.props.postStore;
         getUserPostList(this.props.location.id).then(res=>{
             const {userPostList} =this.props.postStore;
+            const {nowUser} =this.props.userStore;
             this.userPostList = userPostList.map( userPost => 
-                (<li key={userPost.member_id} className='postList'><div>{userPost.name}</div><div>{userPost.text}</div><div><img src={'/upload/' + userPost.photo} /></div><div>{userPost.createDateTime}</div></li>)
+                (<li key={userPost.member_id} className='postList'><div>{userPost.name}</div><div>{userPost.text}</div><div><img src={'/upload/' + userPost.photo} /></div><div>{userPost.createDateTime}</div>{nowUser.id===this.id&&(<button onClick={this.postDelete.bind(this,userPost.post_id)}>삭제</button>)}</li>)
             )
         });
         getUser(this.props.location.id).then(res => {
@@ -90,13 +91,19 @@ class User extends React.Component {
         })
         this.props.history.push('/main')
     }
-
+    
+    postDelete = (id, e) => {
+        e.preventDefault();
+        const { postDelete } = this.props.postStore;
+        postDelete(id);
+    }
 }
 
 export default withRouter(User);
 
 const Profile = styled.div`
-
+border: 1px solid #dcdcdc;
+text-align: center;
 `
 
 const UserDiv = styled.div`
@@ -107,6 +114,12 @@ const UserDiv = styled.div`
     text-align: center;
     img{
         width: 700px;
+    }
+}
+#postDiv{
+    text-align: center;
+    li{
+        margin: 0 auto;
     }
 }
 `
