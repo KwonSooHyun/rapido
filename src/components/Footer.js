@@ -6,6 +6,8 @@ export default class Footer extends React.Component {
         return(
             <Foot>
                 footer
+                footer
+                footer
             </Foot>
         );
     }
